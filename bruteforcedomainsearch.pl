@@ -29,27 +29,30 @@ while( $n <= $limit ){
 
     while(my @combo = $combinat->next_combination){
         $domain_word = '';
-        foreach my $domain_char (@combo){
-             $domain_word .= $domain_char;
-        }
-        if( "$domain_word" !~ m/^-.*/ && $domain_word !~ m/.*-$/ ){
-            $domain_word .= $tld;
-            #print "$domain_word\n";
-            my $query = $res->search($domain_word);
-            if ($query) {
-                #foreach my $rr ($query->answer) {
-                    #next unless $rr->type eq "A";
-                    #print $rr->address, "\n";
-                #}
-            } else {
+        my $permutation = Math::Combinatorics->new(count => $n, data => [@combo], );
+        while(my @permuto = $permutation->next_permutation){
+            foreach my $domain_char (@permuto){
+                 $domain_word .= $domain_char;
+            }
+            if( "$domain_word" !~ m/^-.*/ && $domain_word !~ m/.*-$/ ){
+                $domain_word .= $tld;
                 #print "$domain_word\n";
-                my $return_output  = grep { $_ =~ m/No\ match/} split(/\n/,  whois($domain_word));
-                if($return_output){
-                    print "$domain_word is available ";
-                    open(LOG, ">>/tmp/domlog") or warn "cant open log $!";
-                    print LOG "$domain_word\n";
-                    close LOG or warn "cant close log $!";
-                    print "$return_output\n";
+                my $query = $res->search($domain_word);
+                if ($query) {
+                    #foreach my $rr ($query->answer) {
+                        #next unless $rr->type eq "A";
+                        #print $rr->address, "\n";
+                    #}
+                } else {
+                    #print "$domain_word\n";
+                    my $return_output  = grep { $_ =~ m/No\ match/} split(/\n/,  whois($domain_word));
+                    if($return_output){
+                        print "$domain_word is available ";
+                        open(LOG, ">>/tmp/domlog") or warn "cant open log $!";
+                        print LOG "$domain_word\n";
+                        close LOG or warn "cant close log $!";
+                        print "$return_output\n";
+                    }
                 }
             }
         }
