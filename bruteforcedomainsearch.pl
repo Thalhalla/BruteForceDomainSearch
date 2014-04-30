@@ -17,7 +17,7 @@ print "Please type in how many letters you want to start with: ";
 my $n = <STDIN>;
 print "Please type in how many letters you want to test in DNS: ";
 my $limit = <STDIN>;
-print "Please type in the top level domain you'd like to brute force ";
+print "Please type in the top level domain you'd like to brute force [i.e. .com]";
 my $tld = <STDIN>;
 my $domain_word = '';
 while( $n <= $limit ){
