@@ -28,9 +28,9 @@ while( $n <= $limit ){
     my $combinat = Math::Combinatorics->new(count => $n, data => [@n], );
 
     while(my @combo = $combinat->next_combination){
-        $domain_word = '';
         my $permutation = Math::Combinatorics->new(count => $n, data => [@combo], );
         while(my @permuto = $permutation->next_permutation){
+            $domain_word = '';
             foreach my $domain_char (@permuto){
                  $domain_word .= $domain_char;
             }
