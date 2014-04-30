@@ -46,19 +46,14 @@ while( $count <= $limit ){
                 #}
             } else {
                 #print "$domain_word\n";
-                #my $return_output = `whois $domain_word |grep 'No match for'`;
-                #my $return_output = whois($domain_word);
-                #my @r = split(/\n/, $s);
-                #my @t = grep { $_ =~ m/No\ match/} @r;
                 my $return_output  = grep { $_ =~ m/No\ match/} split(/\n/,  whois($domain_word));
                 if($return_output){
                     print "$domain_word is available ";
-                    open(LOG, ">>~/domlog");
+                    open(LOG, ">>/tmp/domlog") or warn "cant open log $!";
                     print LOG "$domain_word\n";
+                    close LOG or warn "cant close log $!";
                     print "$return_output\n";
                 }
-                #warn "query failed: ", $res->errorstring, "\n";
-                #print "$return_output\n";
             }
         }
     }
