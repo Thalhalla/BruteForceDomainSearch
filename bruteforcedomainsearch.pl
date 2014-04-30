@@ -19,9 +19,8 @@ print "Please type in how many letters you want to test in DNS: ";
 my $limit = <STDIN>;
 print "Please type in the top level domain you'd like to brute force ";
 my $tld = <STDIN>;
-my $count = 1;
 my $domain_word = '';
-while( $count <= $limit ){
+while( $n <= $limit ){
 
     my @chars = qw( a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 );
     push(@chars, '-');
@@ -57,8 +56,5 @@ while( $count <= $limit ){
             }
         }
     }
-
-    output:
-    $count++;
     $n++;
 }
