@@ -1,6 +1,7 @@
 #! /usr/bin/perl
 use Data::Dumper;
 use Net::DNS;
+ use Algorithm::Permute;
 use Math::Combinatorics;
 use warnings;
 use strict;
@@ -22,21 +23,20 @@ chomp( my $tld = <STDIN>);
 my $domain_word = '';
 while( $n <= $limit ){
 
-    my @chars = qw( a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 );
-    push(@chars, '-');
-    my @n = @chars;
-    my $combinat = Math::Combinatorics->new(count => $n, data => [@n], );
+    my @n = qw( a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 );
+    push(@n, '-');
+    #my $combinat = new Algorithm::Permute(@n, $n);
+    my $combinat = new Algorithm::Permute(['a'..'z', '-'], $n);
 
-    while(my @combo = $combinat->next_combination){
+    while(my @combo = $combinat->next){
         my $permutation = Math::Combinatorics->new(count => $n, data => [@combo], );
-        while(my @permuto = $permutation->next_permutation){
             $domain_word = '';
-            foreach my $domain_char (@permuto){
+            foreach my $domain_char (@combo){
                  $domain_word .= $domain_char;
             }
             if( "$domain_word" !~ m/^-.*/ && $domain_word !~ m/.*-$/ ){
-                $domain_word .= $tld;
-                #print "$domain_word\n";
+                #$domain_word .= $tld;
+                print "$domain_word\n";
                 my $query = $res->search($domain_word);
                 if ($query) {
                     #foreach my $rr ($query->answer) {
@@ -55,7 +55,6 @@ while( $n <= $limit ){
                     }
                 }
             }
-        }
     }
     $n++;
 }
