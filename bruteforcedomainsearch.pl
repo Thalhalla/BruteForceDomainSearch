@@ -37,6 +37,7 @@ say "Please type in how many letters you want to test in DNS: ";
 chomp( my $limit = <STDIN>);
 say "Please type in the top level domain you'd like to brute force [i.e. .com]";
 chomp( my $tld = <STDIN>);
+say "open domain names will now be logged into /tmp/domlog";
 my $domain_word = '';
 while( $n <= $limit ){
     my $combinat = new Algorithm::Permute(['a'..'z', '-'], $n);
