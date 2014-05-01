@@ -14,11 +14,11 @@ my $TIMEOUT = 10; # Cancel the request if connection is not made within
 my $res   = Net::DNS::Resolver->new;
 
 print "Please type in how many letters you want to start with: ";
-my $n = <STDIN>;
+chomp( my $n = <STDIN>);
 print "Please type in how many letters you want to test in DNS: ";
-my $limit = <STDIN>;
+chomp( my $limit = <STDIN>);
 print "Please type in the top level domain you'd like to brute force [i.e. .com]";
-my $tld = <STDIN>;
+chomp( my $tld = <STDIN>);
 my $domain_word = '';
 while( $n <= $limit ){
 
