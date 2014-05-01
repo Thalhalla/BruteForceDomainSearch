@@ -16,6 +16,8 @@ my $TIMEOUT = 10; # Cancel the request if connection is not made within
 my @resolver;
 my $rescount = 0;
 my $count = 0;
+my $throttle = 10;
+my $sleepthrottle = 1;
 $resolver[0] = Net::DNS::Resolver->new( nameservers => [qw(8.8.8.8 8.8.4.4)], recurse => 1, debug => 0, );
 $resolver[1] = Net::DNS::Resolver->new( nameservers => [qw(209.244.0.3 209.244.0.4)], recurse => 1, debug => 0, );
 $resolver[2] = Net::DNS::Resolver->new( nameservers => [qw( 216.146.35.35 216.146.36.36  )], recurse => 1, debug => 0, );
@@ -42,30 +44,28 @@ my $domain_word = '';
 while( $n <= $limit ){
     my $combinat = new Algorithm::Permute(['a'..'z', '-'], $n);
     while(my @combo = $combinat->next){
-        if($count > 10){ sleep 1; $count = 0;} #throttle
-        my $permutation = Math::Combinatorics->new(count => $n, data => [@combo], );
+        if($count > $throttle){ sleep $sleepthrottle; $count = 0;} #throttle
         $domain_word = '';
         foreach my $domain_char (@combo){
              $domain_word .= $domain_char;
         }
         if( "$domain_word" !~ m/^-.*/ && $domain_word !~ m/.*-$/ ){
             $domain_word .= $tld;
-            #print "$domain_word\n";
-            #say "rescount = $rescount";
+            #say "$domain_word is about to be queried";
             my $query = $resolver[$rescount]->search($domain_word);
             $rescount++;
             if ($rescount > $#resolver){$rescount = 0; $count++;}
             if ($query) {
-                #print "$domain_word\n";
+                #say "$domain_word resolved";
             } else {
-                #print "$domain_word\n";
+                #say "$domain_word did not resolve";
                 my $return_output  = grep { $_ =~ m/No\ match/} split(/\n/,  whois($domain_word));
                 if($return_output){
-                    print "$domain_word is available ";
+                    say "$domain_word is available ";
                     open(LOG, ">>/tmp/domlog") or warn "cant open log $!";
                     print LOG "$domain_word\n";
                     close LOG or warn "cant close log $!";
-                    print "$return_output\n";
+                    say "$return_output";
                 }
             }
         }
