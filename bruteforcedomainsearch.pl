@@ -13,10 +13,9 @@ my $CACHE_DIR = "/var/spool/pwhois/"; # Whois information will be
 my $CACHE_TIME = 24; # Cache files will be cleared after not accessed
 my $USE_CNAMES = 1; # Use whois-servers.net to get the whois server
 my $TIMEOUT = 10; # Cancel the request if connection is not made within
-#my $res   = Net::DNS::Resolver->new;
 my @resolver;
 my $rescount = 0;
-#my $res = Net::DNS::Resolver->new( nameservers => [qw(8.8.8.8 8.8.4.4 216.146.35.35 216.146.36.36 )], recurse => 1, debug => 1, );
+my $count = 0;
 $resolver[0] = Net::DNS::Resolver->new( nameservers => [qw(8.8.8.8 8.8.4.4)], recurse => 1, debug => 0, );
 $resolver[1] = Net::DNS::Resolver->new( nameservers => [qw(209.244.0.3 209.244.0.4)], recurse => 1, debug => 0, );
 $resolver[2] = Net::DNS::Resolver->new( nameservers => [qw( 216.146.35.35 216.146.36.36  )], recurse => 1, debug => 0, );
@@ -40,13 +39,7 @@ say "Please type in the top level domain you'd like to brute force [i.e. .com]";
 chomp( my $tld = <STDIN>);
 my $domain_word = '';
 while( $n <= $limit ){
-
-    my @n = qw( a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 );
-    push(@n, '-');
-    #my $combinat = new Algorithm::Permute(@n, $n);
     my $combinat = new Algorithm::Permute(['a'..'z', '-'], $n);
-    my $count = 0;
-
     while(my @combo = $combinat->next){
         if($count > 10){ say "sleep"; sleep 1; $count = 0;} #throttle
         my $permutation = Math::Combinatorics->new(count => $n, data => [@combo], );
