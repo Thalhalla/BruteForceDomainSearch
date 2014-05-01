@@ -41,7 +41,7 @@ my $domain_word = '';
 while( $n <= $limit ){
     my $combinat = new Algorithm::Permute(['a'..'z', '-'], $n);
     while(my @combo = $combinat->next){
-        if($count > 10){ say "sleep"; sleep 1; $count = 0;} #throttle
+        if($count > 10){ sleep 1; $count = 0;} #throttle
         my $permutation = Math::Combinatorics->new(count => $n, data => [@combo], );
         $domain_word = '';
         foreach my $domain_char (@combo){
