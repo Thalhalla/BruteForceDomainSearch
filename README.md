@@ -3,14 +3,10 @@ BruteForceDomainSearch
 
 Brute Force Domain Search
 
-Not much to see here, does what it says on the tin , e.g.
 
 Of note this is "brute force" and is likely to get you banned ten ways from Sunday!  Do not ever run this script as it will destroy your computer and set fire to whatever dwelling you currently inhabit!
-
 You've been warned
-
-of note permutations appear to be broken:
-https://rt.cpan.org/Public/Bug/Display.html?id=74455
+Not much to see here, does what it says on the tin , e.g.
 
 $ perl bruteforcedomainsearch.pl
 
