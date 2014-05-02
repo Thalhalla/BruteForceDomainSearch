@@ -27,13 +27,12 @@ Getopt::Long::Configure ("bundling");
         "throttle=i"   => \$throttle,
         "finishingNumber=i"   => \$finishingNumber,
         "startingNumber=i"   => \$startingNumber,
-        "interactive|i"   => \$interactive,
         "verbose|v+"  => \$verbosity)
     or croak("Error in command line arguments\n");
 my @resolver;
 my $rescount = 0;
 my $count = 0;
-say "verbosity = $verbosity" unless ($verbosity < 1);
+say "verbosity = $verbosity" if ($verbosity > 1);
 $resolver[0] =  Net::DNS::Resolver->new( nameservers => [qw( 8.8.8.8 8.8.4.4 )], recurse => 1, debug => 0, );
 $resolver[1] =  Net::DNS::Resolver->new( nameservers => [qw( 209.244.0.3 209.244.0.4 )], recurse => 1, debug => 0, );
 $resolver[2] =  Net::DNS::Resolver->new( nameservers => [qw( 216.146.35.35 216.146.36.36 )], recurse => 1, debug => 0, );
@@ -48,21 +47,13 @@ $resolver[9] =  Net::DNS::Resolver->new( nameservers => [qw( 208.76.50.50 208.76
 $resolver[10] = Net::DNS::Resolver->new( nameservers => [qw( 89.233.43.71 89.104.194.142 )], recurse => 1, debug => 0, );
 $resolver[11] = Net::DNS::Resolver->new( nameservers => [qw( 74.82.42.42 )], recurse => 1, debug => 0, );
 $resolver[12] = Net::DNS::Resolver->new( nameservers => [qw( 109.69.8.51 )], recurse => 1, debug => 0, );
-if($interactive){
-    say "Please type in how many letters you want to start with: ";
-    chomp($startingNumber = <STDIN>);
-    say "Please type in how many letters you want to test in DNS: ";
-    chomp($finishingNumber = <STDIN>);
-    say "Please type in the top level domain you'd like to brute force [i.e. .com]";
-    chomp($tld = <STDIN>);
-}
 unless($finishingNumber && $startingNumber){
  croak "usage: read the source or use -i option for interactive mode";
 }
 if($finishingNumber < $startingNumber){
  croak "you cannot start less than you finish";
 }
-say "open domain names will now be logged into /tmp/domlog" unless ($verbosity < 2);
+say "open domain names will now be logged into /tmp/domlog" if ($verbosity > 2);
 my $domain_word = '';
 my $n = $startingNumber;
 my $limit = $finishingNumber;
@@ -74,30 +65,30 @@ while($n <= $limit){
         foreach my $domain_char (@permuto){
             $domain_word .= $domain_char;
         }
-        if("$domain_word" !~ m/^-.*/ && $domain_word !~ m/.*-$/){
+        if("$domain_word" !~ m/^-.*/xm && $domain_word !~ m/.*-$/xm){
             $domain_word .= $tld;
-            say "$domain_word is about to be queried" unless($verbosity < 7);
+            say "$domain_word is about to be queried" if($verbosity > 7);
             my $query = $resolver[$rescount]->search($domain_word);
             $rescount++;
             if ($rescount > $#resolver){$rescount = 0; $count++;}
             if ($query) {
-                say "$domain_word resolved" unless($verbosity < 6);
+                say "$domain_word resolved" if($verbosity > 6);
             } else {
-                say "$domain_word did not resolve" unless($verbosity < 5);
+                say "$domain_word did not resolve" if($verbosity > 5);
                 #my $whois_output = whois($domain_word); # giving false negatives
                 my $whois_output = `whois $domain_word`;
-                say $whois_output unless($verbosity < 10);
-                my @return_output_positive = grep { $_ =~ m/Registrar:/} split(/\n/,  $whois_output);
-                say @return_output_positive unless($verbosity < 9);
+                say $whois_output if($verbosity > 10);
+                my @return_output_positive = grep { $_ =~ m/Registrar:/xm} split(/\n/xm,  $whois_output);
+                say @return_output_positive if($verbosity > 9);
                 unless(@return_output_positive){
-                    my @return_output  = grep { $_ =~ m/No\ match/} split(/\n/,  $whois_output);
-                    say @return_output unless($verbosity < 8);
+                    my @return_output  = grep { $_ =~ m/No\ match/xm} split(/\n/xm,  $whois_output);
+                    say @return_output if($verbosity > 8);
                     if(@return_output){
-                        say "$domain_word is available " unless($verbosity < 0);
-                        open(LOG, ">>/tmp/domlog") or warn "cant open log $!";
-                        print LOG "$domain_word\n";
-                        close LOG or warn "cant close log $!";
-                        say "@return_output" unless($verbosity < 5);
+                        say "$domain_word is available " if($verbosity > 0);
+                        open my $LOG, '>>', "/tmp/domlog" or carp "cant open log $!";
+                        print $LOG "$domain_word\n";
+                        close $LOG or carp "cant close log $!";
+                        say "@return_output" if($verbosity > 5);
                     }
                 }
             }
