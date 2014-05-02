@@ -81,14 +81,22 @@ while($n <= $limit){
             if ($query) {
                 say "$domain_word resolved" unless($verbosity < 6);
             } else {
-                #say "$domain_word did not resolve";
-                my $return_output  = grep { $_ =~ m/No\ match/} split(/\n/,  whois($domain_word));
-                if($return_output){
-                    say "$domain_word is available " unless($verbosity < 0);
-                    open(LOG, ">>/tmp/domlog") or warn "cant open log $!";
-                    print LOG "$domain_word\n";
-                    close LOG or warn "cant close log $!";
-                    say "$return_output" unless($verbosity < 5);
+                say "$domain_word did not resolve" unless($verbosity < 5);
+                #my $whois_output = whois($domain_word); # giving false negatives
+                my $whois_output = `whois $domain_word`;
+                say $whois_output unless($verbosity < 10);
+                my @return_output_positive = grep { $_ =~ m/Registrar:/} split(/\n/,  $whois_output);
+                say @return_output_positive unless($verbosity < 9);
+                unless(@return_output_positive){
+                    my @return_output  = grep { $_ =~ m/No\ match/} split(/\n/,  $whois_output);
+                    say @return_output unless($verbosity < 8);
+                    if(@return_output){
+                        say "$domain_word is available " unless($verbosity < 0);
+                        open(LOG, ">>/tmp/domlog") or warn "cant open log $!";
+                        print LOG "$domain_word\n";
+                        close LOG or warn "cant close log $!";
+                        say "@return_output" unless($verbosity < 5);
+                    }
                 }
             }
         }
