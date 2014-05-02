@@ -47,11 +47,6 @@ $resolver[9] =  Net::DNS::Resolver->new( nameservers => [qw( 208.76.50.50 208.76
 $resolver[10] = Net::DNS::Resolver->new( nameservers => [qw( 89.233.43.71 89.104.194.142 )], recurse => 1, debug => 0, );
 $resolver[11] = Net::DNS::Resolver->new( nameservers => [qw( 74.82.42.42 )], recurse => 1, debug => 0, );
 $resolver[12] = Net::DNS::Resolver->new( nameservers => [qw( 109.69.8.51 )], recurse => 1, debug => 0, );
-
-unless($finishingNumber && $startingNumber){
- die "usage: read the source or use -i option for interactive mode";
-}
-
 if($interactive){
     say "Please type in how many letters you want to start with: ";
     chomp($startingNumber = <STDIN>);
@@ -59,6 +54,12 @@ if($interactive){
     chomp($finishingNumber = <STDIN>);
     say "Please type in the top level domain you'd like to brute force [i.e. .com]";
     chomp($tld = <STDIN>);
+}
+unless($finishingNumber && $startingNumber){
+ die "usage: read the source or use -i option for interactive mode";
+}
+if($finishingNumber < $startingNumber){
+ die "you cannot start less than you finish";
 }
 say "open domain names will now be logged into /tmp/domlog" unless ($verbosity < 2);
 my $domain_word = '';
