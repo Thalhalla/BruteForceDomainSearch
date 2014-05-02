@@ -6,6 +6,7 @@ use v5.10;
 use Math::Combinatorics;
 use warnings;
 use strict;
+use Carp;
 use Net::Whois::Raw qw( whois $OMIT_MSG $CHECK_FAIL $CACHE_DIR $CACHE_TIME $USE_CNAMES $TIMEOUT );
     my $OMIT_MSG = 2;
     my $CHECK_FAIL = 2;
@@ -28,7 +29,7 @@ Getopt::Long::Configure ("bundling");
         "startingNumber=i"   => \$startingNumber,
         "interactive|i"   => \$interactive,
         "verbose|v+"  => \$verbosity)
-    or die("Error in command line arguments\n");
+    or croak("Error in command line arguments\n");
 my @resolver;
 my $rescount = 0;
 my $count = 0;
@@ -56,10 +57,10 @@ if($interactive){
     chomp($tld = <STDIN>);
 }
 unless($finishingNumber && $startingNumber){
- die "usage: read the source or use -i option for interactive mode";
+ croak "usage: read the source or use -i option for interactive mode";
 }
 if($finishingNumber < $startingNumber){
- die "you cannot start less than you finish";
+ croak "you cannot start less than you finish";
 }
 say "open domain names will now be logged into /tmp/domlog" unless ($verbosity < 2);
 my $domain_word = '';
