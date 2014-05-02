@@ -7,17 +7,32 @@ use Math::Combinatorics;
 use warnings;
 use strict;
 use Net::Whois::Raw qw( whois $OMIT_MSG $CHECK_FAIL $CACHE_DIR $CACHE_TIME $USE_CNAMES $TIMEOUT );
-my $OMIT_MSG = 2; # This will try some additional stripping rules
-my $CHECK_FAIL = 2; # This will match against several more rules
-my $CACHE_DIR = "/var/spool/pwhois/"; # Whois information will be
-my $CACHE_TIME = 24; # Cache files will be cleared after not accessed
-my $USE_CNAMES = 1; # Use whois-servers.net to get the whois server
-my $TIMEOUT = 10; # Cancel the request if connection is not made within
+    my $OMIT_MSG = 2; # This will try some additional stripping rules
+    my $CHECK_FAIL = 2; # This will match against several more rules
+    my $CACHE_DIR = "/var/spool/pwhois/"; # Whois information will be
+    my $CACHE_TIME = 24; # Cache files will be cleared after not accessed
+    my $USE_CNAMES = 1; # Use whois-servers.net to get the whois server
+    my $TIMEOUT = 10; # Cancel the request if connection is not made within
+use Getopt::Long;
+Getopt::Long::Configure ("bundling");
+    my $verbosity = 0;
+    my $interactive = 0;
+    my $throttle = 1;
+    my $sleepthrottle = 10;
+    my $startingNumber = 2;
+    my $finishingNumber = 0;
+    my $tld = '.com';
+    GetOptions ("sleepthrottle=i" => \$sleepthrottle,
+              "throttle=i"   => \$throttle,
+              "finishingNumber=i"   => \$finishingNumber,
+              "startingNumber=i"   => \$startingNumber,
+              "interactive|i"   => \$interactive,
+              "verbose|v+"  => \$verbosity)
+    or die("Error in command line arguments\n");
 my @resolver;
 my $rescount = 0;
 my $count = 0;
-my $throttle = 10;
-my $sleepthrottle = 1;
+say "verbosity = $verbosity" unless ($verbosity < 4);
 $resolver[0] = Net::DNS::Resolver->new( nameservers => [qw(8.8.8.8 8.8.4.4)], recurse => 1, debug => 0, );
 $resolver[1] = Net::DNS::Resolver->new( nameservers => [qw(209.244.0.3 209.244.0.4)], recurse => 1, debug => 0, );
 $resolver[2] = Net::DNS::Resolver->new( nameservers => [qw( 216.146.35.35 216.146.36.36  )], recurse => 1, debug => 0, );
@@ -33,15 +48,23 @@ $resolver[10] = Net::DNS::Resolver->new( nameservers => [qw( 89.233.43.71 89.104
 $resolver[11] = Net::DNS::Resolver->new( nameservers => [qw( 74.82.42.42 )], recurse => 1, debug => 0, );
 $resolver[12] = Net::DNS::Resolver->new( nameservers => [qw( 109.69.8.51 )], recurse => 1, debug => 0, );
 
-say "Please type in how many letters you want to start with: ";
-chomp( my $n = <STDIN>);
-say "Please type in how many letters you want to test in DNS: ";
-chomp( my $limit = <STDIN>);
-say "Please type in the top level domain you'd like to brute force [i.e. .com]";
-chomp( my $tld = <STDIN>);
-say "open domain names will now be logged into /tmp/domlog";
+if($finishingNumber < $startingNumber){
+ die "usage: read the source or use -i option for interactive mode";
+}
+
+if($interactive){
+    say "Please type in how many letters you want to start with: ";
+    chomp($startingNumber = <STDIN>);
+    say "Please type in how many letters you want to test in DNS: ";
+    chomp($finishingNumber = <STDIN>);
+    say "Please type in the top level domain you'd like to brute force [i.e. .com]";
+    chomp($tld = <STDIN>);
+}
+say "open domain names will now be logged into /tmp/domlog" unless ($verbosity < 1);
 my $domain_word = '';
-while( $n <= $limit ){
+my $n = $startingNumber;
+my $limit = $finishingNumber;
+while($n <= $limit ){
     my $combinat = new Algorithm::Permute(['a'..'z', '-'], $n);
     while(my @combo = $combinat->next){
         if($count > $throttle){ sleep $sleepthrottle; $count = 0;} #throttle
@@ -49,7 +72,7 @@ while( $n <= $limit ){
         foreach my $domain_char (@combo){
              $domain_word .= $domain_char;
         }
-        if( "$domain_word" !~ m/^-.*/ && $domain_word !~ m/.*-$/ ){
+        if("$domain_word" !~ m/^-.*/ && $domain_word !~ m/.*-$/){
             $domain_word .= $tld;
             #say "$domain_word is about to be queried";
             my $query = $resolver[$rescount]->search($domain_word);
