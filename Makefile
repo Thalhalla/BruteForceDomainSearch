@@ -23,32 +23,29 @@ run: rm rundocker
 debug: rm debugdocker
 
 rundocker:
-	$(eval TMP := $(shell mktemp -d --suffix=DOCKERTMP))
 	$(eval NAME := $(shell cat NAME))
 	$(eval TAG := $(shell cat TAG))
-	chmod 777 $(TMP)
+	$(eval PWD := $(shell pwd))
+	mkdir -p $(PWD)/tmp
+	chmod 777 tmp
+	touch tmp/domlog
 	@docker run --name=$(NAME) \
 	--cidfile="cid" \
-	-v $(TMP):/tmp \
+	-v $(PWD)/tmp:/tmp \
 	-d \
-	-P \
-	-v /var/run/docker.sock:/run/docker.sock \
-	-v $(shell which docker):/bin/docker \
 	-t $(TAG)
-	echo "later check $(TMP)/domlog"
 
 debugdocker:
-	$(eval TMP := $(shell mktemp -d --suffix=DOCKERTMP))
 	$(eval NAME := $(shell cat NAME))
 	$(eval TAG := $(shell cat TAG))
-	chmod 777 $(TMP)
+	$(eval PWD := $(shell pwd))
+	mkdir -p $(PWD)/tmp
+	chmod 777 tmp
+	touch tmp/domlog
 	@docker run --name=$(NAME) \
 	--cidfile="cid" \
-	-v $(TMP):/tmp \
+	-v $(PWD)/tmp:/tmp \
 	-d \
-	-P \
-	-v /var/run/docker.sock:/run/docker.sock \
-	-v $(shell which docker):/bin/docker \
 	-t $(TAG) test
 
 builddocker:

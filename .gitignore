@@ -16,4 +16,5 @@ nytprof.out
 *.o
 *.bs
 domlog
+tmp
 cid
