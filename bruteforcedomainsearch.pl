@@ -65,6 +65,7 @@ my $limit = $finishingNumber;
 while($n <= $limit){
     my $permutation = new Algorithm::Permute(['a'..'z', '-'], $n);
     while(my @permuto = $permutation->next){
+        say "count is $count, throttle is $throttle" if($verbosity > 8);
         if($count > $throttle){say "sleepthrottle" if($verbosity > 8); sleep $sleepthrottle; $count = 0;} #throttle
         $domain_word = '';
         foreach my $domain_char (@permuto){
