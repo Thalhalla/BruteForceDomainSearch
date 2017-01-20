@@ -4,3 +4,6 @@ all:
 reqs:
 	sudo apt-get install -y cpanminus
 	cpanm lib::xi
+
+quick:
+	perl -Mlib::xi bruteforcedomainsearch.pl --startingNumber 2 --finishingNumber 10 --throttle 33 --sleepthrottle 1 -vvvvvv
