@@ -74,7 +74,7 @@ while($n <= $limit){
         say "domain word = $domain_word" if($verbosity > 8);
         if("$domain_word" !~ m/^-.*/xm && $domain_word !~ m/.*-$/xm){
             $domain_word .= $tld;
-            say "$domain_word is about to be queried by $resolver[$rescount]" if($verbosity > 7);
+            say "$domain_word is about to be queried by  resolver $rescount which is Dumper($resolver[$rescount])" if($verbosity > 7);
             my $query = $resolver[$rescount]->search($domain_word);
             say "$domain_word was queried" if($verbosity > 8);
             $rescount++;
