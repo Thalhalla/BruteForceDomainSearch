@@ -47,13 +47,13 @@ the `docker run` command
 from inside the container, so no need to go into the container to
 retrieve it
 
-`make a` <-- A macro which builds a docker image locally, runs it and displays the
+`make a`     <-- A macro which builds a docker image locally, runs it and displays the
 logs
 
 `make build` <-- builds a docker image locally
 
-`make log` <-- shows logs of the running docker
+`make log`   <-- shows logs of the running docker
 
-`make run` <-- runs a docker image locally
+`make run`   <-- runs a docker image locally
 
 `make clean` <-- kills and removes the docker container
