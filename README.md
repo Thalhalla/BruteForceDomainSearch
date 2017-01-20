@@ -12,3 +12,10 @@ some example usage:
 perl bruteforcedomainsearch.pl --startingNumber 6 --finishingNumber 8 --throttle 10 --sleepthrottle 5 -vvvvvv
 
 that will hunt down all available 6, 7, and 8 letter domains available and limit you to ten requests with each resolver before sleeping for five seconds  (roundabouts it was a simple throttle nothing fancy)
+
+### Makefile
+
+`make`  <-- will do the above line and install any dependencies using
+`lib::xi`
+
+`make reqs` <-- will install cpanminus and then `lib::xi` in debian
