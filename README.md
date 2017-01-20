@@ -30,7 +30,7 @@ that will hunt down all available 6, 7, and 8 letter domains available and limit
 
 ### Makefile
 
-`make full`  <-- runs a full rundown from 1 to 10 letters
+`make full`  <-- full rundown from 1 to 10 letters
 
 `make xi`  <-- will do the above line and install any dependencies using
 `lib::xi`
