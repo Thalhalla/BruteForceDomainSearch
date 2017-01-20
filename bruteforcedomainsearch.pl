@@ -76,6 +76,7 @@ while($n <= $limit){
             $domain_word .= $tld;
             say "$domain_word is about to be queried" if($verbosity > 7);
             my $query = $resolver[$rescount]->search($domain_word);
+            say "$domain_word was queried" if($verbosity > 8);
             $rescount++;
             if ($rescount > $#resolver){$rescount = 0; $count++;}
             if ($query) {
