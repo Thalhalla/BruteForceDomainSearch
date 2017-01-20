@@ -1,5 +1,6 @@
 #! /usr/bin/perl
 use Data::Dumper;
+use Parallel::ForkManager;
 use Net::DNS;
 use Algorithm::Permute;
 use v5.10;
@@ -19,12 +20,14 @@ Getopt::Long::Configure ("bundling");
     my $verbosity = 0;
     my $interactive = 0;
     my $throttle = 1;
+    my $forks = 2;
     my $sleepthrottle = 10;
     my $startingNumber;
     my $finishingNumber;
     my $tld = '.com';
     GetOptions ("sleepthrottle=i" => \$sleepthrottle,
         "throttle=i"   => \$throttle,
+        "forks=i"   => \$forks,
         "finishingNumber=i"   => \$finishingNumber,
         "startingNumber=i"   => \$startingNumber,
         "verbose|v+"  => \$verbosity)
@@ -36,6 +39,7 @@ say "verbosity = $verbosity" if ($verbosity > 1);
 say "startingNumber = $startingNumber" if ($verbosity > 1);
 say "finishingNumber = $finishingNumber" if ($verbosity > 1);
 say "throttle = $throttle" if ($verbosity > 1);
+say "forks = $forks" if ($verbosity > 1);
 say "sleepthrottle = $sleepthrottle" if ($verbosity > 1);
 $resolver[0]  =  Net::DNS::Resolver->new( nameservers => [qw( 8.8.8.8 )], recurse => 1, debug => 0, );
 $resolver[1]  =  Net::DNS::Resolver->new( nameservers => [qw( 209.244.0.3 )], recurse => 1, debug => 0, );
@@ -49,7 +53,7 @@ $resolver[8]  =  Net::DNS::Resolver->new( nameservers => [qw( 64.6.64.6 )], recu
 $resolver[9]  =  Net::DNS::Resolver->new( nameservers => [qw( 199.5.157.131 )], recurse => 1, debug => 0, );
 #$resolver[9]  =  Net::DNS::Resolver->new( nameservers => [qw( 208.76.50.50 )], recurse => 1, debug => 0, );
 $resolver[9]  =  Net::DNS::Resolver->new( nameservers => [qw( 8.8.8.8 )], recurse => 1, debug => 0, );
-$resolver[10] =  Net::DNS::Resolver->new( nameservers => [qw( 89.233.43.71 )], recurse => 1, debug => 0, );
+$resolver[10] =  Net::DNS::Resolver->new( nameservers => [qw( 89.233.43.71 4.2.2.2 )], recurse => 1, debug => 0, );
 $resolver[11] =  Net::DNS::Resolver->new( nameservers => [qw( 74.82.42.42 )], recurse => 1, debug => 0, );
 $resolver[12] =  Net::DNS::Resolver->new( nameservers => [qw( 109.69.8.51 )], recurse => 1, debug => 0, );
 $resolver[13] =  Net::DNS::Resolver->new( nameservers => [qw( 64.6.65.6 )], recurse => 1, debug => 0, );
@@ -68,7 +72,7 @@ $resolver[24] =  Net::DNS::Resolver->new( nameservers => [qw( 23.253.163.53 )], 
 $resolver[25] =  Net::DNS::Resolver->new( nameservers => [qw( 77.88.8.1 )], recurse => 1, debug => 0, );
 $resolver[26] =  Net::DNS::Resolver->new( nameservers => [qw( 77.88.8.8 )], recurse => 1, debug => 0, );
 $resolver[27] =  Net::DNS::Resolver->new( nameservers => [qw( 91.239.100.100 )], recurse => 1, debug => 0, );
-$resolver[28] =  Net::DNS::Resolver->new( nameservers => [qw( 89.233.43.71 )], recurse => 1, debug => 0, );
+$resolver[28] =  Net::DNS::Resolver->new( nameservers => [qw( 89.233.43.71 8.8.8.8 8.8.4.4 )], recurse => 1, debug => 0, );
 $resolver[29] =  Net::DNS::Resolver->new( nameservers => [qw( 74.82.42.42 )], recurse => 1, debug => 0, );
 $resolver[30] =  Net::DNS::Resolver->new( nameservers => [qw( 109.69.8.51 )], recurse => 1, debug => 0, );
 $resolver[31] =  Net::DNS::Resolver->new( nameservers => [qw( 4.2.2.1 )], recurse => 1, debug => 0, );
@@ -80,9 +84,10 @@ $resolver[36] =  Net::DNS::Resolver->new( nameservers => [qw( 8.20.247.20 )], re
 $resolver[37] =  Net::DNS::Resolver->new( nameservers => [qw( 199.85.127.10 )], recurse => 1, debug => 0, );
 $resolver[38] =  Net::DNS::Resolver->new( nameservers => [qw( 209.88.198.133 )], recurse => 1, debug => 0, );
 $resolver[39] =  Net::DNS::Resolver->new( nameservers => [qw( 195.46.39.40 )], recurse => 1, debug => 0, );
-$resolver[40] =  Net::DNS::Resolver->new( nameservers => [qw( 208.71.35.137 )], recurse => 1, debug => 0, );
-$resolver[41] =  Net::DNS::Resolver->new( nameservers => [qw( 208.76.51.51 )], recurse => 1, debug => 0, );
-$resolver[42] =  Net::DNS::Resolver->new( nameservers => [qw( 89.104.194.142 )], recurse => 1, debug => 0, );
+#$resolver[40] =  Net::DNS::Resolver->new( nameservers => [qw( 208.71.35.137 )], recurse => 1, debug => 0, );
+$resolver[40] =  Net::DNS::Resolver->new( nameservers => [qw( 8.8.4.4 208.71.35.137 )], recurse => 1, debug => 0, );
+$resolver[41] =  Net::DNS::Resolver->new( nameservers => [qw( 208.76.51.51 8.8.8.8 )], recurse => 1, debug => 0, );
+$resolver[42] =  Net::DNS::Resolver->new( nameservers => [qw( 89.104.194.142 4.2.2.1 )], recurse => 1, debug => 0, );
 unless($finishingNumber && $startingNumber){
  croak "usage: read the source or use -i option for interactive mode";
 }
@@ -92,25 +97,31 @@ if($finishingNumber < $startingNumber){
 say "open domain names will now be logged into /tmp/domlog" if ($verbosity > 2);
 my $domain_word = '';
 my $n = $startingNumber;
-say "Entering $n epoch" if($verbosity > 0);
+say "Entering epoch $n" if($verbosity > 0);
 my $limit = $finishingNumber;
 while($n <= $limit){
     my $permutation = new Algorithm::Permute(['a'..'z', '-'], $n);
+    my $pm = Parallel::ForkManager->new($forks);
+    DOMAINLOOP:
     while(my @permuto = $permutation->next){
-        say "count is $count, throttle is $throttle" if($verbosity > 8);
+        $rescount++;
+        if ($rescount > $#resolver){$rescount = 0; $count++;}
+        say "count is $count, throttle is $throttle" if($verbosity > 9);
         if($count > $throttle){say "sleepthrottle" if($verbosity > 8); sleep $sleepthrottle; $count = 0;} #throttle
+        $pm->start and next DOMAINLOOP; # do the fork
         $domain_word = '';
+        # Max 30 processes for parallel download
         foreach my $domain_char (@permuto){
             $domain_word .= $domain_char;
         }
-        say "domain word = $domain_word" if($verbosity > 8);
+        say "domain word = $domain_word" if($verbosity > 9);
         if("$domain_word" !~ m/^-.*/xm && $domain_word !~ m/.*-$/xm){
             $domain_word .= $tld;
-            say "$domain_word is about to be queried by  resolver $rescount which is Dumper(\$resolver[$rescount])" if($verbosity > 7);
+            my $dumped = Dumper($resolver[$rescount]);
+            say "$domain_word is about to be queried by  resolver $rescount" if($verbosity > 4);
+            say "$dumped" if($verbosity > 9);
             my $query = $resolver[$rescount]->search($domain_word);
             say "$domain_word was queried" if($verbosity > 8);
-            $rescount++;
-            if ($rescount > $#resolver){$rescount = 0; $count++;}
             if ($query) {
                 say "$domain_word resolved" if($verbosity > 6);
             } else {
@@ -133,7 +144,9 @@ while($n <= $limit){
                 }
             }
         }
+      $pm->finish; # do the exit in the child process
     }
+    $pm->wait_all_children;
     $n++;
-    say "Entering $n epoch" if($verbosity > 0);
+    say "Entering epoch $n" if($verbosity > 0);
 }
