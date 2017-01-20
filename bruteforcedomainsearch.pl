@@ -47,7 +47,8 @@ $resolver[6]  =  Net::DNS::Resolver->new( nameservers => [qw( 81.218.119.11 )], 
 $resolver[7]  =  Net::DNS::Resolver->new( nameservers => [qw( 195.46.39.39 )], recurse => 1, debug => 0, );
 $resolver[8]  =  Net::DNS::Resolver->new( nameservers => [qw( 64.6.64.6 )], recurse => 1, debug => 0, );
 $resolver[9]  =  Net::DNS::Resolver->new( nameservers => [qw( 199.5.157.131 )], recurse => 1, debug => 0, );
-$resolver[9]  =  Net::DNS::Resolver->new( nameservers => [qw( 208.76.50.50 )], recurse => 1, debug => 0, );
+#$resolver[9]  =  Net::DNS::Resolver->new( nameservers => [qw( 208.76.50.50 )], recurse => 1, debug => 0, );
+$resolver[9]  =  Net::DNS::Resolver->new( nameservers => [qw( 8.8.8.8 )], recurse => 1, debug => 0, );
 $resolver[10] =  Net::DNS::Resolver->new( nameservers => [qw( 89.233.43.71 )], recurse => 1, debug => 0, );
 $resolver[11] =  Net::DNS::Resolver->new( nameservers => [qw( 74.82.42.42 )], recurse => 1, debug => 0, );
 $resolver[12] =  Net::DNS::Resolver->new( nameservers => [qw( 109.69.8.51 )], recurse => 1, debug => 0, );
@@ -57,7 +58,8 @@ $resolver[15] =  Net::DNS::Resolver->new( nameservers => [qw( 84.200.70.40 )], r
 $resolver[16] =  Net::DNS::Resolver->new( nameservers => [qw( 208.67.222.222 )], recurse => 1, debug => 0, );
 $resolver[17] =  Net::DNS::Resolver->new( nameservers => [qw( 208.67.220.220 )], recurse => 1, debug => 0, );
 $resolver[18] =  Net::DNS::Resolver->new( nameservers => [qw( 156.154.71.1 )], recurse => 1, debug => 0, );
-$resolver[19] =  Net::DNS::Resolver->new( nameservers => [qw( 96.90.175.167 )], recurse => 1, debug => 0, );
+#$resolver[19] =  Net::DNS::Resolver->new( nameservers => [qw( 96.90.175.167 )], recurse => 1, debug => 0, );
+$resolver[19]  =  Net::DNS::Resolver->new( nameservers => [qw( 8.8.8.8 )], recurse => 1, debug => 0, );
 $resolver[20] =  Net::DNS::Resolver->new( nameservers => [qw( 193.183.98.154 )], recurse => 1, debug => 0, );
 $resolver[21] =  Net::DNS::Resolver->new( nameservers => [qw( 37.235.1.174 )], recurse => 1, debug => 0, );
 $resolver[22] =  Net::DNS::Resolver->new( nameservers => [qw( 37.235.1.177 )], recurse => 1, debug => 0, );
