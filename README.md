@@ -41,6 +41,13 @@ that will hunt down all available 6, 7, and 8 letter domains available and limit
 Most of this section works by virtue of the `--cidfile="cid"` option to
 the `docker run` command
 
+###### tmp/domlog
+
+Using the Makefile to create the docker container will result in a
+`tmp` directory here, which will contain the resulting `/tmp/domlog`
+from inside the container so no need to go into the container to
+retrieve it
+
 `make a` <-- A macro which builds a docker image locally, runs it and displays the
 logs
 
