@@ -46,5 +46,3 @@ logs
 `make log` <-- shows logs of the running docker
 
 `make run` <-- runs a docker image locally
-
-
