@@ -10,7 +10,10 @@ help:
 	@echo ""   2. make build     - build docker container
 	@echo ""   3. make clean     - kill and remove docker container
 	@echo ""   4. make enter     - execute an interactive bash in docker container
-	@echo ""   3. make logs      - follow the logs of docker container
+	@echo ""   5. make logs      - follow the logs of docker container
+	@echo ""   6. make a         - build, run, and watch the logs macro
+
+a: build run logs
 
 build: NAME TAG builddocker
 
