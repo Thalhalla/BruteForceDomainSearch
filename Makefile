@@ -6,4 +6,4 @@ reqs:
 	cpanm lib::xi
 
 quick:
-	perl -Mlib::xi bruteforcedomainsearch.pl --startingNumber 2 --finishingNumber 10 --throttle 33 --sleepthrottle 1 -vvvvvv
+	perl bruteforcedomainsearch.pl --startingNumber 2 --finishingNumber 10 --throttle 33 --sleepthrottle 1 -vvvvv
