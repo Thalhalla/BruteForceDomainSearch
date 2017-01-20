@@ -44,7 +44,7 @@ the `docker run` command
 
 `tmp/domlog` <--Using the Makefile to create the docker container will result in a
 `tmp` directory here, which will contain the resulting `/tmp/domlog`
-from inside the container so no need to go into the container to
+from inside the container, so no need to go into the container to
 retrieve it
 
 `make a` <-- A macro which builds a docker image locally, runs it and displays the
