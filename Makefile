@@ -95,3 +95,6 @@ test:
 
 short:
 	perl bruteforcedomainsearch.pl --startingNumber 1 --finishingNumber 2 --throttle 99 --sleepthrottle 1 --forks 11 -v
+
+xi:
+	perl -Mlib::xi bruteforcedomainsearch.pl --startingNumber 1 --finishingNumber 10 --throttle 10 --sleepthrottle 1 --forks 9 -v
