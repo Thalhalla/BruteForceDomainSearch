@@ -6,21 +6,23 @@ names that are available for purchase
 
 ### Usage
 
+```
 bruteforcedomainsearch.pl [--startingNumber 6 --finishingNumber 8 --throttle 10 --sleepthrottle 5 -vvvvvvvvvv]
+```
 
 #### Args
 `--startingNumber`
-* The number of letters we will start iterating from (i.e. 1 = a.com, 5 = aaaaa.com)
+	+ The number of letters we will start iterating from (i.e. 1 = a.com, 5 = aaaaa.com)
 `--finishingNumber`
-* The number of letters we will finish iterating at (i.e. 1 = a.com, 5 = aaaaa.com)
+	+ The number of letters we will finish iterating at (i.e. 1 = a.com, 5 = aaaaa.com)
 `--throttle`
-* This is the number of loops to hit the Nameservers with before sleeping
+	+ This is the number of loops to hit the Nameservers with before sleeping
 `--sleepthrottle`
-* This is the number of seconds to sleep once we hit the throttle
+	+ This is the number of seconds to sleep once we hit the throttle
 `-v`
-* verbosity (notice you can stack more v's at the end to get more verbosity)
+	+ verbosity (notice you can stack more v's at the end to get more verbosity)
 `-vvvvvvvvv`
-* Really verbose
+	+ Really verbose
 
 ### Notes
 
@@ -30,20 +32,22 @@ Not much to see here, does what it says on the tin , e.g.
 it will start dumping out available domain names into STDOUT and /tmp/domlog
 some example usage:
 
+```
 ./bruteforcedomainsearch.pl --startingNumber 6 --finishingNumber 8 --throttle 10 --sleepthrottle 5 -vvvvvv
+```
 
 that will hunt down all available 6, 7, and 8 letter domains available and limit you to ten requests with each resolver before sleeping for five seconds  (roundabouts it was a simple throttle nothing fancy)
 
 ### Makefile
 
 `make full`
-*  full rundown from 1 to 10 letters
+	+ full rundown from 1 to 10 letters
 
 `make xi`
-*  will do the same as above and install any dependencies using `lib::xi`
+	+ will do the same as above and install any dependencies using `lib::xi`
 
 `make reqs`
-*  will install cpanminus and then `lib::xi` in debian
+	+ will install cpanminus and then `lib::xi` in debian
 
 ### Docker
 
@@ -51,20 +55,19 @@ Most of this section works by virtue of the `--cidfile="cid"` option to
 the `docker run` command
 
 `tmp/domlog`
-* Using the Makefile to create the docker container will result in a `tmp` directory here, which will contain the resulting `/tmp/domlog` from inside the container, so no need to go into the container to retrieve it
+	+ Using the Makefile to create the docker container will result in a `tmp` directory here, which will contain the resulting `/tmp/domlog` from inside the container, so no need to go into the container to retrieve it
 
 `make a`
-*  A macro which builds a docker image locally, runs it and displays the
-logs
+	+ A macro which builds a docker image locally, runs it and displays the logs
 
 `make build`
-*  builds a docker image locally
+	+ builds a docker image locally
 
 `make log`
-*  shows logs of the running docker
+	+ shows logs of the running docker
 
 `make run`
-*  runs a docker image locally
+	+ runs a docker image locally
 
 `make clean`
-*  kills and removes the docker container
+	+ kills and removes the docker container
