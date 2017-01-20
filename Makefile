@@ -15,7 +15,9 @@ help:
 build: NAME TAG builddocker
 
 # run a plain container
-run: build rundocker
+run: rm rundocker
+
+debug: rm debugdocker
 
 rundocker:
 	$(eval TMP := $(shell mktemp -d --suffix=DOCKERTMP))
@@ -30,15 +32,30 @@ rundocker:
 	-v /var/run/docker.sock:/run/docker.sock \
 	-v $(shell which docker):/bin/docker \
 	-t $(TAG)
+	echo "later check $(TMP)/domlog"
+
+debugdocker:
+	$(eval TMP := $(shell mktemp -d --suffix=DOCKERTMP))
+	$(eval NAME := $(shell cat NAME))
+	$(eval TAG := $(shell cat TAG))
+	chmod 777 $(TMP)
+	@docker run --name=$(NAME) \
+	--cidfile="cid" \
+	-v $(TMP):/tmp \
+	-d \
+	-P \
+	-v /var/run/docker.sock:/run/docker.sock \
+	-v $(shell which docker):/bin/docker \
+	-t $(TAG) test
 
 builddocker:
 	/usr/bin/time -v docker build -t `cat TAG` .
 
 kill:
-	-@docker kill `cat cid`
+	-@docker -l fatal kill `cat cid`
 
 rm-image:
-	-@docker rm `cat cid`
+	-@docker -l fatal rm `cat cid`
 	-@rm cid
 
 rm: kill rm-image
@@ -62,7 +79,7 @@ TAG:
 	done ;
 
 full:
-	perl -Mlib::xi bruteforcedomainsearch.pl --startingNumber 6 --finishingNumber 8 --throttle 10 --sleepthrottle 5 --forks 3 -vvvvvv
+	perl bruteforcedomainsearch.pl --startingNumber 1 --finishingNumber 10 --throttle 10 --sleepthrottle 1 --forks 9 -v
 
 reqs:
 	sudo apt-get install -y cpanminus
@@ -75,3 +92,6 @@ q: quick
 
 test:
 	perl bruteforcedomainsearch.pl --startingNumber 1 --finishingNumber 1 --throttle 33 --sleepthrottle 1 --forks 0 -vvvvvvvvvv
+
+short:
+	perl bruteforcedomainsearch.pl --startingNumber 1 --finishingNumber 2 --throttle 99 --sleepthrottle 1 --forks 11 -v

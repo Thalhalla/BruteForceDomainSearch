@@ -119,7 +119,7 @@ while($n <= $limit){
             $domain_word .= $tld;
             my $dumped = Dumper($resolver[$rescount]);
             say "$domain_word is about to be queried by  resolver $rescount" if($verbosity > 4);
-            say "$dumped" if($verbosity > 9);
+            say "$dumped" if($verbosity > 11);
             my $query = $resolver[$rescount]->search($domain_word);
             say "$domain_word was queried" if($verbosity > 8);
             if ($query) {

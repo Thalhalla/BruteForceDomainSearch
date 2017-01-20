@@ -7,7 +7,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 apt-get -qq update && apt-get -qqy dist-upgrade && \
 apt-get -qqy --no-install-recommends install \
 build-essential cpanminus perl locales \
-wget curl && \
+whois wget curl && \
 useradd brute && \
 echo 'en_US.ISO-8859-15 ISO-8859-15'>>/etc/locale.gen && \
 echo 'en_US ISO-8859-1'>>/etc/locale.gen && \
@@ -26,8 +26,12 @@ cpanm Net::Whois::Raw && \
 cpanm Getopt::Long && \
 rm -Rf /var/lib/apt/lists/*
 
-COPY bruteforcedomainsearch.pl /assets/
+COPY bruteforcedomainsearch.pl /home/brute/
+COPY Makefile /home/brute/
+COPY run.sh /home/brute/
 
 USER brute
+WORKDIR /home/brute
 
-CMD ['/usr/bin/perl', '/assets/bruteforcedomainsearch.pl', '--startingNumber 1', '--finishingNumber 10', '--throttle 99', '--sleepthrottle 1', '--forks 11', '-v']
+ENTRYPOINT [ "/home/brute/run.sh" ]
+CMD [ "full" ]
