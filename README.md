@@ -7,8 +7,7 @@ Brute Force Domain Search
 
 bruteforcedomainsearch.pl [--startingNumber 6 --finishingNumber 8 --throttle 10 --sleepthrottle 5 -vvvvvvvvvv]
 
-### Args
-
+* Args
 	+ --startingNumber # The number of letters we will start iterating from (i.e. 1 = a.com, 5 = aaaaa.com)
 	+ --finishingNumber # The number of letters we will finish iterating at (i.e. 1 = a.com, 5 = aaaaa.com)
 	+ --throttle # This is the number of loops to hit the Nameservers with before sleeping
