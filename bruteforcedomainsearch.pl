@@ -33,6 +33,10 @@ my @resolver;
 my $rescount = 0;
 my $count = 0;
 say "verbosity = $verbosity" if ($verbosity > 1);
+say "startingNumber = $startingNumber" if ($verbosity > 1);
+say "finishingNumber = $finishingNumber" if ($verbosity > 1);
+say "throttle = $throttle" if ($verbosity > 1);
+say "sleepthrottle = $sleepthrottle" if ($verbosity > 1);
 $resolver[0] =  Net::DNS::Resolver->new( nameservers => [qw( 8.8.8.8 8.8.4.4 )], recurse => 1, debug => 0, );
 $resolver[1] =  Net::DNS::Resolver->new( nameservers => [qw( 209.244.0.3 209.244.0.4 )], recurse => 1, debug => 0, );
 $resolver[2] =  Net::DNS::Resolver->new( nameservers => [qw( 216.146.35.35 216.146.36.36 )], recurse => 1, debug => 0, );
@@ -56,6 +60,7 @@ if($finishingNumber < $startingNumber){
 say "open domain names will now be logged into /tmp/domlog" if ($verbosity > 2);
 my $domain_word = '';
 my $n = $startingNumber;
+say "Entering $n epoch" if($verbosity > 0);
 my $limit = $finishingNumber;
 while($n <= $limit){
     my $permutation = new Algorithm::Permute(['a'..'z', '-'], $n);

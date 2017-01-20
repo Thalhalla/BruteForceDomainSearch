@@ -7,3 +7,8 @@ reqs:
 
 quick:
 	perl bruteforcedomainsearch.pl --startingNumber 2 --finishingNumber 10 --throttle 33 --sleepthrottle 1 -vvvvv
+
+q: quick
+
+test:
+	perl bruteforcedomainsearch.pl --startingNumber 1 --finishingNumber 2 --throttle 33 --sleepthrottle 1 -vvvvvvvvvv
