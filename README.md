@@ -6,7 +6,7 @@ names that are available for purchase
 
 ### Usage
 
-`bruteforcedomainsearch.pl [--startingNumber 6 --finishingNumber 8 --throttle 10 --sleepthrottle 5 -vvvvvvvvvv]`
+`bruteforcedomainsearch.pl [--startingNumber 6 --finishingNumber 8 --throttle 10 --sleepthrottle 5 --tld '.com' -vvvvvvvvvv]`
 
 #### Args
 
@@ -25,6 +25,10 @@ names that are available for purchase
 `--sleepthrottle`
 
 * This is the number of seconds to sleep once we hit the throttle
+
+`--tld`
+
+* This is the Top Level Domain (e.g. '.com') to hit the Nameservers with before sleeping
 
 `-v`
 

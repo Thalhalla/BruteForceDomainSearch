@@ -100,3 +100,6 @@ short:
 
 xi:
 	perl -Mlib::xi bruteforcedomainsearch.pl --startingNumber 1 --finishingNumber 10 --throttle 10 --sleepthrottle 1 --forks 9 -v
+
+us:
+	perl bruteforcedomainsearch.pl --startingNumber 1 --finishingNumber 10 --throttle 10 --sleepthrottle 1 --forks 9 --tld '.us' -v

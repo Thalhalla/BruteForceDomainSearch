@@ -28,6 +28,7 @@ Getopt::Long::Configure ("bundling");
     GetOptions ("sleepthrottle=i" => \$sleepthrottle,
         "throttle=i"   => \$throttle,
         "forks=i"   => \$forks,
+        "tld=s"   => \$tld,
         "finishingNumber=i"   => \$finishingNumber,
         "startingNumber=i"   => \$startingNumber,
         "verbose|v+"  => \$verbosity)
