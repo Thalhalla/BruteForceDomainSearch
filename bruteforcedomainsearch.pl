@@ -65,11 +65,12 @@ my $limit = $finishingNumber;
 while($n <= $limit){
     my $permutation = new Algorithm::Permute(['a'..'z', '-'], $n);
     while(my @permuto = $permutation->next){
-        if($count > $throttle){ sleep $sleepthrottle; $count = 0;} #throttle
+        if($count > $throttle){say "sleepthrottle" if($verbosity > 8); sleep $sleepthrottle; $count = 0;} #throttle
         $domain_word = '';
         foreach my $domain_char (@permuto){
             $domain_word .= $domain_char;
         }
+        say "domain word = $domain_word" if($verbosity > 8);
         if("$domain_word" !~ m/^-.*/xm && $domain_word !~ m/.*-$/xm){
             $domain_word .= $tld;
             say "$domain_word is about to be queried" if($verbosity > 7);
