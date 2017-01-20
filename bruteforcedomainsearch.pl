@@ -95,4 +95,5 @@ while($n <= $limit){
         }
     }
     $n++;
+    say "Entering $n epoch" if($verbosity > 0);
 }
