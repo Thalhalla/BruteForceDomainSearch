@@ -38,6 +38,9 @@ that will hunt down all available 6, 7, and 8 letter domains available and limit
 
 ### Docker
 
+Most of this section works by virtue of the `--cidfile="cid"` option to
+the `docker run` command
+
 `make a` <-- A macro which builds a docker image locally, runs it and displays the
 logs
 
@@ -46,3 +49,5 @@ logs
 `make log` <-- shows logs of the running docker
 
 `make run` <-- runs a docker image locally
+
+`make clean` <-- kills and removes the docker container
