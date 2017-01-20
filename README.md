@@ -1,7 +1,8 @@
 BruteForceDomainSearch
 ======================
 
-Brute Force Domain Search
+Brute Force Domain Search - a bit of perl to help you find open domain
+names that are available for purchase
 
 ### Usage
 
