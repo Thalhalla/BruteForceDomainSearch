@@ -12,27 +12,21 @@ bruteforcedomainsearch.pl [--startingNumber 6 --finishingNumber 8 --throttle 10 
 
 #### Args
 `--startingNumber`
-* -
 	+ The number of letters we will start iterating from (i.e. 1 = a.com, 5 = aaaaa.com)
 
 `--finishingNumber`
-* -
 	+ The number of letters we will finish iterating at (i.e. 1 = a.com, 5 = aaaaa.com)
 
 `--throttle`
-* -
 	+ This is the number of loops to hit the Nameservers with before sleeping
 
 `--sleepthrottle`
-* -
 	+ This is the number of seconds to sleep once we hit the throttle
 
 `-v`
-* -
 	+ verbosity (notice you can stack more v's at the end to get more verbosity)
 
 `-vvvvvvvvv`
-* -
 	+ Really verbose
 
 ### Notes
@@ -52,15 +46,12 @@ that will hunt down all available 6, 7, and 8 letter domains available and limit
 ### Makefile
 
 `make full`
-* -
 	+ full rundown from 1 to 10 letters
 
 `make xi`
-* -
 	+ will do the same as above and install any dependencies using `lib::xi`
 
 `make reqs`
-* -
 	+ will install cpanminus and then `lib::xi` in debian
 
 ### Docker
@@ -69,25 +60,19 @@ Most of this section works by virtue of the `--cidfile="cid"` option to
 the `docker run` command
 
 `tmp/domlog`
-* -
 	+ Using the Makefile to create the docker container will result in a `tmp` directory here, which will contain the resulting `/tmp/domlog` from inside the container, so no need to go into the container to retrieve it
 
 `make a`
-* -
 	+ A macro which builds a docker image locally, runs it and displays the logs
 
 `make build`
-* -
 	+ builds a docker image locally
 
 `make log`
-* -
 	+ shows logs of the running docker
 
 `make run`
-* -
 	+ runs a docker image locally
 
 `make clean`
-* -
 	+ kills and removes the docker container
