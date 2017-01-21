@@ -53,6 +53,7 @@ some example usage:
 `./bruteforcedomainsearch.pl --startingNumber 6 --finishingNumber 8 --throttle 10 --sleepthrottle 5 -vvvvvv`
 
 that will hunt down all available 6, 7, and 8 letter domains available and limit you to ten requests with each resolver before sleeping for five seconds  (roundabouts it was a simple throttle nothing fancy)
+it will start dumping out available domain names into STDOUT (at `-v` it will only print out errors and available domain names) and all successfull domain names will be recorded in /tmp/domlog
 
 ### Makefile
 
